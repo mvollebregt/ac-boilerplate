@@ -4,6 +4,7 @@ import { Pizza } from '../../models/pizza.model';
 import { PizzasService } from '../../services/pizzas.service';
 
 import * as fromStore from '../../store';
+import {Store} from '@ngrx/store';
 
 @Component({
   selector: 'products',
@@ -33,9 +34,11 @@ import * as fromStore from '../../store';
 export class ProductsComponent implements OnInit {
   pizzas: Pizza[];
 
-  constructor(private pizzaService: PizzasService) {}
+  constructor(private pizzaService: PizzasService,
+              private store: Store<fromStore.ProductsState>) {}
 
   ngOnInit() {
+    this.store.dispatch(new fromStore.LoadPizzas());
     this.pizzaService.getPizzas().subscribe(pizzas => {
       this.pizzas = pizzas;
     });

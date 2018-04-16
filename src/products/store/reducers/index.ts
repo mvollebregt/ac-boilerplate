@@ -7,4 +7,10 @@ import * as fromToppings from './toppings.reducer';
 export interface ProductsState {}
 
 // reducers
-export const reducers: ActionReducerMap<ProductsState> = {};
+export const reducers: ActionReducerMap<ProductsState> = {
+  pizzas: fromPizzas.reducer
+};
+
+export interface ProductsState {
+  pizzas: fromPizzas.PizzaState;
+}
