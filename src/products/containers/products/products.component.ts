@@ -5,10 +5,12 @@ import { PizzasService } from '../../services/pizzas.service';
 
 import * as fromStore from '../../store';
 import {Store} from '@ngrx/store';
+import {Observable} from 'rxjs/Observable';
+import {tap} from 'rxjs/operators';
 
 @Component({
   selector: 'products',
-  // changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['products.component.scss'],
   template: `
     <div class="products">
@@ -20,11 +22,11 @@ import {Store} from '@ngrx/store';
         </a>
       </div>
       <div class="products__list">
-        <div *ngIf="!((pizzas)?.length)">
+        <div *ngIf="!((pizzas$ | async)?.length)">
           No pizzas, add one to get started.
         </div>
         <pizza-item
-          *ngFor="let pizza of (pizzas)"
+          *ngFor="let pizza of (pizzas$ | async)"
           [pizza]="pizza">
         </pizza-item>
       </div>
@@ -32,15 +34,16 @@ import {Store} from '@ngrx/store';
   `,
 })
 export class ProductsComponent implements OnInit {
-  pizzas: Pizza[];
 
-  constructor(private pizzaService: PizzasService,
-              private store: Store<fromStore.ProductsState>) {}
+  pizzas$: Observable<Pizza[]>;
+
+  constructor(private store: Store<fromStore.ProductsState>) {}
 
   ngOnInit() {
     this.store.dispatch(new fromStore.LoadPizzas());
-    this.pizzaService.getPizzas().subscribe(pizzas => {
-      this.pizzas = pizzas;
-    });
+    this.pizzas$ = this.store.select(fromStore.getPizzas);
+    // this.pizzaService.getPizzas().subscribe(pizzas => {
+    //   this.pizzas = pizzas;
+    // });
   }
 }
