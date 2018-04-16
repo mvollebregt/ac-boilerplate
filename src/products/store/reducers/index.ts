@@ -19,3 +19,4 @@ export interface ProductsState {
 export const getProductsState = createFeatureSelector<ProductsState>('products');
 export const getPizzaState = createSelector(getProductsState, (state: ProductsState) => state.pizzas);
 export const getPizzas = createSelector(getPizzaState, fromPizzas.getPizzas);
+export const getSelectedPizza = createSelector(getPizzaState, fromPizzas.getSelectedPizza);
