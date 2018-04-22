@@ -76,6 +76,7 @@ export class ProductItemComponent implements OnInit {
         );
       })
     );
+    this.selected$ = this.store.select(fromStore.getSelectedPizza)
   }
 
   onSelect(event: Pizza) {
